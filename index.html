@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SoundGood - Audio Enhancement for Videos</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="main-content">
+      <div class="video-container">
+        <div id="dropzone" class="dropzone">
+          <i class="fas fa-upload upload-icon"></i>
+          <p>Drop your video here or click to browse</p>
+        </div>
+        
+        <video id="videoPlayer" controls style="display: none;"></video>
+        
+        <button id="clearBtn" class="video-close-btn" style="display: none;">
+          <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="processing-overlay" id="processingOverlay" style="display: none;">
+          <div class="processing-spinner"></div>
+          <p>Enhancing audio...</p>
+          <div class="mini-progress">
+            <div id="miniProgressFill" class="mini-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="audio-toggle" id="audioToggle" style="display: none;">
+        <button id="toggleAudio" class="toggle-btn">
+          <span class="toggle-label">Original Audio</span>
+        </button>
+        <p class="toggle-hint">Click to switch between original and enhanced audio</p>
+      </div>
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidebar-content">
+        <h1 class="logo">SoundGood</h1>
+        
+        <div class="preset-section">
+          <h3><i class="fas fa-sliders-h"></i> Presets</h3>
+          <div class="preset-wrapper">
+            <i class="fas fa-microphone preset-icon" id="presetIcon"></i>
+            <select id="presetSelect" class="preset-select">
+              <option value="light">Light Enhancement</option>
+              <option value="standard" selected>Standard</option>
+              <option value="aggressive">Aggressive</option>
+              <option value="ultra">Ultra Processing</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="settings">
+          <h3><i class="fas fa-cog"></i> Audio Processing</h3>
+          
+          <div class="setting-group">
+            <div class="setting-header" data-toggle="highpass">
+              <label>
+                <input type="checkbox" id="enableHighPass" checked>
+                <i class="fas fa-filter"></i> High-Pass Filter
+              </label>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="setting-controls collapsible" id="highpass-controls">
+              <label>Frequency: <span id="highPassValue">80</span> Hz</label>
+              <input type="range" id="highPassFreq" min="20" max="200" value="80" step="10">
+            </div>
+          </div>
+          
+          <div class="setting-group">
+            <div class="setting-header" data-toggle="compressor">
+              <label>
+                <input type="checkbox" id="enableCompressor" checked>
+                <i class="fas fa-compress"></i> Dynamic Compression
+              </label>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="setting-controls collapsible" id="compressor-controls">
+              <label>Threshold: <span id="thresholdValue">-12</span> dB</label>
+              <input type="range" id="compressorThreshold" min="-60" max="0" value="-12" step="1">
+              
+              <label>Ratio: <span id="ratioValue">4</span>:1</label>
+              <input type="range" id="compressorRatio" min="1" max="20" value="4" step="0.5">
+              
+              <label>Attack: <span id="attackValue">5</span> ms</label>
+              <input type="range" id="compressorAttack" min="0.1" max="50" value="5" step="0.1">
+              
+              <label>Release: <span id="releaseValue">100</span> ms</label>
+              <input type="range" id="compressorRelease" min="10" max="1000" value="100" step="10">
+              
+              <label>Makeup Gain: <span id="makeupValue">6</span> dB</label>
+              <input type="range" id="compressorMakeup" min="0" max="20" value="6" step="1">
+            </div>
+          </div>
+          
+          <div class="setting-group">
+            <div class="setting-header" data-toggle="normalize">
+              <label>
+                <input type="checkbox" id="enableNormalize" checked>
+                <i class="fas fa-volume-up"></i> Loudness Normalization
+              </label>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="setting-controls collapsible" id="normalize-controls">
+              <label>Target Loudness: <span id="targetLoudnessValue">-16</span> LUFS</label>
+              <input type="range" id="targetLoudness" min="-30" max="-6" value="-16" step="1">
+              <div class="normalization-info">
+                <span class="setting-hint">Common targets:</span>
+                <span class="setting-value">Streaming: -14 LUFS | Broadcast: -23 LUFS | Web: -16 LUFS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div id="result" class="result" style="display: none;">
+          <h3><i class="fas fa-check-circle"></i> Enhanced Video Saved</h3>
+          <p class="output-filename" id="outputPath"></p>
+          <button id="openFolderBtn" class="show-folder-btn">
+            <i class="fas fa-folder-open btn-icon"></i>
+            Show in Folder
+          </button>
+        </div>
+        
+        <div id="regenerateSection" class="regenerate-section" style="display: none;">
+          <p class="settings-changed-hint">Settings have changed</p>
+          <button id="regenerateBtn" class="regenerate-btn">
+            <i class="fas fa-arrows-rotate btn-icon"></i>
+            Generate New Version
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="dist/renderer.js"></script>
+</body>
+</html>
